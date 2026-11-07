@@ -1,3 +1,4 @@
+from catalog.api import api
 from django.contrib import admin
 from django.http import HttpResponse, JsonResponse
 from django.urls import path
@@ -15,4 +16,5 @@ urlpatterns = [
     path("", hello, name="hello"),
     path("health/", health, name="health"),
     path("admin/", admin.site.urls),
+    path("api/", api.urls),
 ]
