@@ -14,6 +14,7 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from catalog.models import Author, Category, Edition, RawShamelaBook, Work
+from catalog.search import normalize_arabic
 from catalog.shamela_parser import parse_details
 
 AUTHOR_ID_RE = re.compile(r"/author/(\d+)")
@@ -90,12 +91,18 @@ class Command(BaseCommand):
                         author.save(update_fields=["name", "full_name_text", "death_year_hijri"])
                 author_ids_seen.add(author_id)
 
+            search_text = normalize_arabic(
+                " ".join(
+                    filter(None, [first.title, parsed.title, author.name if author else None])
+                )
+            )
             work, _ = Work.objects.update_or_create(
                 shamela_book_id=book_id,
                 defaults={
                     "title_ar": first.title,
                     "title_from_blob": parsed.title,
                     "author": author,
+                    "search_text": search_text,
                 },
             )
             work_count += 1

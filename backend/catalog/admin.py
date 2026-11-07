@@ -81,7 +81,8 @@ class EditionAdmin(admin.ModelAdmin):
                 published += 1
             else:
                 skipped += 1
-        self.message_user(request, f"Published {published} edition(s). Skipped {skipped} (no price).")
+        msg = f"Published {published} edition(s). Skipped {skipped} (no price)."
+        self.message_user(request, msg)
 
 
 @admin.register(RawShamelaBook)

@@ -51,6 +51,7 @@ class Work(models.Model):
     title_ar = models.CharField(max_length=500, blank=True)
     # Official title from inside the blob (parser "الكتاب:" label).
     title_from_blob = models.CharField(max_length=500, null=True, blank=True)
+    search_text = models.TextField(blank=True, default="")
     author = models.ForeignKey(
         Author, on_delete=models.PROTECT, null=True, blank=True
     )
