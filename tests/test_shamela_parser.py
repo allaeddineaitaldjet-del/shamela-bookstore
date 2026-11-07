@@ -113,3 +113,45 @@ def test_text_without_labels_is_flagged():
     r = parse_details("نص بلا أي وسوم")
     assert r.needs_review
     assert "no_labels_found" in r.review_reasons
+
+
+def test_new_edition_label_tarikh_al_nashr():
+    # Real example: staged 21739 — "الناشر: دار الحديث - القاهرةتاريخ النشر: ١٤٢٥ هـ - ٢٠٠٤ م"
+    r = parse_details("الكتاب: Tالمؤلف: A (ت ١٠٠هـ)الناشر: Darتاريخ النشر: ١٤٢٥ هـ - ٢٠٠٤ م")
+    assert r.publisher == "Dar"
+    assert r.edition_text == "١٤٢٥ هـ - ٢٠٠٤ م"
+    assert r.year_hijri == 1425
+    assert r.year_gregorian == 2004
+
+
+def test_new_edition_label_sanat_al_nashr():
+    # Real example: staged 14249 — "الناشر: دار الحديث القاهرةسنة النشر: ١٤٢٩هـ - ٢٠٠٨م"
+    r = parse_details("الكتاب: Tالمؤلف: A (ت ١٠٠هـ)الناشر: Darسنة النشر: ١٤٢٩هـ - ٢٠٠٨م")
+    assert r.edition_text == "١٤٢٩هـ - ٢٠٠٨م"
+    assert r.year_hijri == 1429
+    assert r.year_gregorian == 2008
+
+
+def test_new_note_label_taqdim():
+    # Real example: staged 21819 — "تقديم: الدكتور محسن عبد الحميد"
+    r = parse_details("الكتاب: Tالمؤلف: A (ت ١٠٠هـ)تقديم: Dr Xالناشر: P")
+    assert r.publisher == "P"
+    assert any(n.startswith("تقديم:") for n in r.notes)
+
+
+def test_new_note_label_muraja():
+    # Real example: staged 18606 — "مراجعة: د. عبد اللطيف الجيلاني"
+    r = parse_details("الكتاب: Tالمؤلف: A (ت ١٠٠هـ)مراجعة: Dr Yالناشر: P")
+    assert any(n.startswith("مراجعة:") for n in r.notes)
+
+
+def test_new_note_label_ishraf():
+    # Real example: staged rows with "إشراف:" (9 rows) — e.g. supervisor line.
+    r = parse_details("الكتاب: Tالمؤلف: A (ت ١٠٠هـ)إشراف: Dr Zالناشر: P")
+    assert any(n.startswith("إشراف:") for n in r.notes)
+
+
+def test_new_note_label_bahth_manshour():
+    # Real example: staged 909 — "بحث منشور في: مجلة البحوث الإسلامية"
+    r = parse_details("الكتاب: Tالمؤلف: A (ت ١٠٠هـ)بحث منشور في: Journalالناشر: P")
+    assert any(n.startswith("بحث منشور في:") for n in r.notes)
