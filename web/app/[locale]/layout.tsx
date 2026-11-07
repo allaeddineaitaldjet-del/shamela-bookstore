@@ -5,7 +5,6 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { LenisProvider } from "@/components/motion/lenis-provider";
-import { SiteHeader } from "@/components/site-header";
 import "lenis/dist/lenis.css";
 import "../globals.css";
 
@@ -60,10 +59,7 @@ export default async function LocaleLayout({
         className={`${notoNaskh.variable} ${reemKufi.variable} ${lora.variable} antialiased`}
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
-          <LenisProvider>
-            <SiteHeader />
-            {children}
-          </LenisProvider>
+          <LenisProvider>{children}</LenisProvider>
         </NextIntlClientProvider>
       </body>
     </html>
