@@ -33,6 +33,22 @@ class EditionAdmin(admin.ModelAdmin):
 
 @admin.register(RawShamelaBook)
 class RawShamelaBookAdmin(admin.ModelAdmin):
-    list_display = ("source_book_id", "category_slug", "title", "source_file", "imported_at")
+    list_display = (
+        "source_book_id",
+        "category_slug",
+        "title",
+        "source_file",
+        "imported_at",
+        "fetched_at",
+    )
     search_fields = ("title", "author_name", "source_book_id", "details_text")
     list_filter = ("category_slug", "source_file")
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False

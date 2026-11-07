@@ -12,6 +12,7 @@ class RawShamelaBook(models.Model):
     details_text = models.TextField(blank=True)
     category_slug = models.SlugField(max_length=100, blank=True)
     source_file = models.CharField(max_length=200, blank=True)
+    fetched_at = models.DateTimeField(null=True, blank=True)
     imported_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -51,7 +52,7 @@ class Work(models.Model):
     # Official title from inside the blob (parser "الكتاب:" label).
     title_from_blob = models.CharField(max_length=500, null=True, blank=True)
     author = models.ForeignKey(
-        Author, on_delete=models.CASCADE, null=True, blank=True
+        Author, on_delete=models.PROTECT, null=True, blank=True
     )
     categories = models.ManyToManyField(Category, blank=True)
 
@@ -61,6 +62,7 @@ class Work(models.Model):
 
 class Edition(models.Model):
     work = models.ForeignKey(Work, on_delete=models.CASCADE)
+    source = models.CharField(max_length=50, default="shamela")
     publisher = models.CharField(max_length=500, null=True, blank=True)
     editor = models.CharField(max_length=500, null=True, blank=True)
     edition_text = models.TextField(null=True, blank=True)
@@ -76,6 +78,13 @@ class Edition(models.Model):
     notes = models.TextField(blank=True, default="")
     needs_review = models.BooleanField(default=False)
     review_reasons = models.TextField(blank=True, default="")
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["work", "source"], name="unique_work_source"
+            )
+        ]
 
     def __str__(self):
         return f"{self.work} — {self.edition_text or 'no edition'}"
