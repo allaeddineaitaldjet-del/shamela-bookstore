@@ -1,26 +1,71 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --bg: #F6EFE0;
+  --surface: #FFFBF2;
+  --ink: #2A2118;
+  --ink-soft: #6B5B49;
+  --primary: #1F5C4A;
+  --accent: #B5532F;
+  --gold: #B8913A;
+  --line: #D9CBB0;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Keep Tailwind aliases pointing at DESIGN tokens */
+  --background: var(--bg);
+  --foreground: var(--ink);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg: #16130F;
+    --surface: #201B15;
+    --ink: #F1E7D3;
+    --ink-soft: #B8A98E;
+    --primary: #4FA088;
+    --accent: #D9774F;
+    --gold: #C9A24D;
+    --line: #3A3126;
   }
 }
 
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--ink);
+  --color-surface: var(--surface);
+  --color-ink-soft: var(--ink-soft);
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --color-gold: var(--gold);
+  --color-line: var(--line);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1.9;
+  margin: 0;
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+  text-align: start;
+}
+
+html[lang="ar"] body {
+  font-family: var(--font-noto-naskh), "Noto Naskh Arabic", serif;
+}
+
+html[lang="ar"] h1,
+html[lang="ar"] h2,
+html[lang="ar"] h3 {
+  font-family: var(--font-reem-kufi), var(--font-noto-naskh), serif;
+}
+
+html[lang="fr"] body {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+html[lang="fr"] h1,
+html[lang="fr"] h2,
+html[lang="fr"] h3 {
+  font-family: var(--font-lora), Georgia, serif;
 }
