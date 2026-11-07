@@ -6,14 +6,14 @@ from catalog.models import Author, Category, Edition, RawShamelaBook, Work
 from django.core.management import call_command
 
 
-def _raw(book_id, title="Title", author_id=1, slug="test-a"):
+def _raw(book_id, title="Title", author_id=1, slug="test-a", blob=None, author_name="Short Author"):
     return RawShamelaBook.objects.create(
         source_book_id=str(book_id),
         book_url=f"https://shamela.ws/book/{book_id}",
         title=title,
-        author_name="Short Author",
+        author_name=author_name,
         author_url=f"https://shamela.ws/author/{author_id}",
-        details_text="الكتاب: MyTitleالمؤلف: Full Author (ت ١٠٠هـ)المحقق: Ed",
+        details_text=blob or "الكتاب: MyTitleالمؤلف: Full Author (ت ١٠٠هـ)المحقق: Ed",
         category_slug=slug,
         source_file=f"shamela__{slug}.csv",
     )
@@ -80,3 +80,43 @@ def test_review_file_only_needs_review(tmp_path):
         rows = list(csv.DictReader(f))
     assert len(rows) == 1
     assert rows[0]["row"] == "2"
+
+
+@pytest.mark.django_db
+def test_author_death_year_not_erased_both_orders(tmp_path):
+    Category.objects.create(slug="test-a", name_ar="A", name_fr="A")
+    with_death = "الكتاب: Aالمؤلف: Full (ت ١٠٠هـ)"
+    without_death = "الكتاب: Bالمؤلف: Full"
+    # Order 1: with year first, then without -> death year stays (never erased).
+    _raw(10, blob=with_death, author_id=9)
+    _raw(11, blob=without_death, author_id=9)
+    call_command("transform_shamela", "--review-dir", str(tmp_path))
+    a = Author.objects.get(shamela_author_id="9")
+    assert a.death_year_hijri == 100
+    assert a.full_name_text  # stays non-empty
+    # Order 2 (fresh DB simulation via new author): without first, then with.
+    RawShamelaBook.objects.all().delete()
+    Edition.objects.all().delete()
+    Work.objects.all().delete()
+    Author.objects.all().delete()
+    _raw(12, blob=without_death, author_id=8)
+    _raw(13, blob=with_death, author_id=8)
+    call_command("transform_shamela", "--review-dir", str(tmp_path))
+    a2 = Author.objects.get(shamela_author_id="8")
+    assert a2.death_year_hijri == 100
+    assert a2.full_name_text == "Full (ت ١٠٠هـ)"
+
+
+@pytest.mark.django_db
+def test_locked_edition_keeps_edited_publisher(tmp_path):
+    Category.objects.create(slug="test-a", name_ar="A", name_fr="A")
+    _raw(1)
+    call_command("transform_shamela", "--review-dir", str(tmp_path))
+    ed = Edition.objects.get(work__shamela_book_id="1")
+    ed.publisher = "My Edited Publisher"
+    ed.locked = True
+    ed.save(update_fields=["publisher", "locked"])
+    call_command("transform_shamela", "--review-dir", str(tmp_path))
+    ed.refresh_from_db()
+    assert ed.publisher == "My Edited Publisher"
+    assert ed.locked is True

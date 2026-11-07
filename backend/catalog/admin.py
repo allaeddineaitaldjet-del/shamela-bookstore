@@ -25,10 +25,31 @@ class WorkAdmin(admin.ModelAdmin):
 
 @admin.register(Edition)
 class EditionAdmin(admin.ModelAdmin):
-    list_display = ("work", "publisher", "editor", "year_hijri", "is_published", "needs_review")
+    list_display = (
+        "work",
+        "publisher",
+        "editor",
+        "year_hijri",
+        "is_published",
+        "needs_review",
+        "locked",
+    )
     search_fields = ("publisher", "editor", "work__title_ar")
-    list_filter = ("is_published", "needs_review")
+    list_filter = ("is_published", "needs_review", "locked")
     autocomplete_fields = ("work",)
+    actions = ["lock_selected", "unlock_selected"]
+
+    def save_model(self, request, obj, form, change):
+        obj.locked = True
+        super().save_model(request, obj, form, change)
+
+    @admin.action(description="Lock selected")
+    def lock_selected(self, request, queryset):
+        queryset.update(locked=True)
+
+    @admin.action(description="Unlock selected")
+    def unlock_selected(self, request, queryset):
+        queryset.update(locked=False)
 
 
 @admin.register(RawShamelaBook)

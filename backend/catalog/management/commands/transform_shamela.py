@@ -47,7 +47,7 @@ class Command(BaseCommand):
         for r in rows:
             by_book.setdefault(r.source_book_id, []).append(r)
 
-        author_count = 0
+        author_ids_seen: set[str] = set()
         work_count = 0
         edition_count = 0
         needs_review_per_file: dict[str, int] = {}
@@ -58,12 +58,13 @@ class Command(BaseCommand):
             first = sorted(staged_list, key=lambda x: x.category_slug)[0]
             parsed = parse_details(first.details_text)
 
-            # Author upsert
+            # Author upsert — never replace non-empty with empty.
+            # Only set death_year_hijri/full_name_text when parser found a value.
             author = None
             m = AUTHOR_ID_RE.search(first.author_url or "")
             if m:
                 author_id = m.group(1)
-                author, _ = Author.objects.update_or_create(
+                author, created_a = Author.objects.get_or_create(
                     shamela_author_id=author_id,
                     defaults={
                         "name": first.author_name,
@@ -71,7 +72,23 @@ class Command(BaseCommand):
                         "death_year_hijri": parsed.death_year_hijri,
                     },
                 )
-                author_count += 1
+                if not created_a:
+                    changed = False
+                    if first.author_name and author.name != first.author_name:
+                        author.name = first.author_name
+                        changed = True
+                    if parsed.author_full_text and author.full_name_text != parsed.author_full_text:
+                        author.full_name_text = parsed.author_full_text
+                        changed = True
+                    if (
+                        parsed.death_year_hijri is not None
+                        and author.death_year_hijri != parsed.death_year_hijri
+                    ):
+                        author.death_year_hijri = parsed.death_year_hijri
+                        changed = True
+                    if changed:
+                        author.save(update_fields=["name", "full_name_text", "death_year_hijri"])
+                author_ids_seen.add(author_id)
 
             work, _ = Work.objects.update_or_create(
                 shamela_book_id=book_id,
@@ -91,22 +108,27 @@ class Command(BaseCommand):
                 )
                 work.categories.add(cat)
 
-            edition, _ = Edition.objects.update_or_create(
-                work=work,
-                source="shamela",
-                defaults={
-                    "publisher": parsed.publisher,
-                    "editor": parsed.editor,
-                    "edition_text": parsed.edition_text,
-                    "year_hijri": parsed.year_hijri,
-                    "year_gregorian": parsed.year_gregorian,
-                    "pages": parsed.pages,
-                    "volumes": parsed.volumes,
-                    "notes": " | ".join(parsed.notes),
-                    "needs_review": parsed.needs_review,
-                    "review_reasons": ",".join(parsed.review_reasons),
-                },
-            )
+            existing_ed = Edition.objects.filter(work=work, source="shamela").first()
+            if existing_ed is not None and existing_ed.locked:
+                # Locked: do not touch any metadata field.
+                pass
+            else:
+                edition, _ = Edition.objects.update_or_create(
+                    work=work,
+                    source="shamela",
+                    defaults={
+                        "publisher": parsed.publisher,
+                        "editor": parsed.editor,
+                        "edition_text": parsed.edition_text,
+                        "year_hijri": parsed.year_hijri,
+                        "year_gregorian": parsed.year_gregorian,
+                        "pages": parsed.pages,
+                        "volumes": parsed.volumes,
+                        "notes": " | ".join(parsed.notes),
+                        "needs_review": parsed.needs_review,
+                        "review_reasons": ",".join(parsed.review_reasons),
+                    },
+                )
             edition_count += 1
 
         # Review files: only needs_review rows, per slug.
@@ -169,7 +191,7 @@ class Command(BaseCommand):
                     w.writeheader()
 
         self.stdout.write(
-            f"authors={author_count} works={work_count} editions={edition_count}"
+            f"authors={len(author_ids_seen)} works={work_count} editions={edition_count}"
         )
         for slug in sorted(needs_review_per_file):
-            print(f"{slug}: needs_review={needs_review_per_file[slug]}")
+            self.stdout.write(f"{slug}: needs_review={needs_review_per_file[slug]}")

@@ -75,6 +75,7 @@ class Edition(models.Model):
     price_dzd = models.PositiveIntegerField(null=True, blank=True)
     stock = models.PositiveIntegerField(default=0)
     is_published = models.BooleanField(default=False)
+    locked = models.BooleanField(default=False)
     notes = models.TextField(blank=True, default="")
     needs_review = models.BooleanField(default=False)
     review_reasons = models.TextField(blank=True, default="")
