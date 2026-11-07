@@ -11,3 +11,11 @@
 - DELETE seed_demo command and all demo prices before launch; real prices/stock from the supplier.
 - Real delivery fees per wilaya (currently one flat env value).
 - Phase 7 hardening: ALLOWED_HOSTS, SECRET_KEY, rate limiting on POST /api/orders, backups, deploy.
+- STOCK BUG: CONFIRMED -> NO_ANSWER is allowed and does not release stock, so a CONFIRMED/NO_ANSWER/TO_CALL/CONFIRMED loop reserves stock twice. Also no restock when CONFIRMED or SHIPPED moves to CANCELLED/REFUSED/RETURNED (except CONFIRMED->CANCELLED/RETURNED today). Fix: remove CONFIRMED->NO_ANSWER; restock when leaving CONFIRMED or SHIPPED to CANCELLED/REFUSED/RETURNED; add tests. MUST be fixed before real orders.
+- Wilayas are now 69 (codes 59-69 missing; names must come from the official Journal officiel).
+- Wilaya migration silently skips if data/wilayas.csv is missing.
+- change_status needs select_for_update.
+- GET /api/books/{id} breaks when a work has two editions.
+- Book list has N+1 queries on categories.
+- Cart (more than one book per order).
+- Playwright e2e test.

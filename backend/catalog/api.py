@@ -40,6 +40,16 @@ def list_categories(request):
     ]
 
 
+@api.get("/wilayas")
+def list_wilayas(request):
+    from orders.models import Wilaya
+
+    return [
+        {"code": w.code, "name_ar": w.name_ar, "name_fr": w.name_fr}
+        for w in Wilaya.objects.all().order_by("code")
+    ]
+
+
 @api.get("/books")
 def list_books(request, category: str | None = None, q: str | None = None, page: int = 1):
     qs = (
