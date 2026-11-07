@@ -1,10 +1,19 @@
-"""Read-only API (Django Ninja). Money is integer DZD, never floats."""
+"""Read-only API (Django Ninja) + POST orders. Money is integer DZD, never floats."""
+
+import logging
+import os
+import re
 
 from django.http import Http404
 from ninja import NinjaAPI
+from ninja.errors import ValidationError
+from orders.models import STATUS_NEW, Order, OrderItem, Wilaya
+from pydantic import BaseModel
 
 from catalog.models import Category, Edition
 from catalog.search import normalize_arabic
+
+logger = logging.getLogger(__name__)
 
 api = NinjaAPI(version="1.0", urls_namespace="api")
 
@@ -70,3 +79,76 @@ def get_book(request, work_id: int):
         }
     )
     return row
+
+
+PHONE_RE = re.compile(r"^(?:\+213|0)(5|6|7)\d{8}$")
+
+
+def _normalize_phone(raw: str) -> str | None:
+    s = re.sub(r"[\s\-()]", "", (raw or "").strip())
+    if s.startswith("+213"):
+        s = "0" + s[4:]
+    if not re.match(r"^0(5|6|7)\d{8}$", s):
+        return None
+    return s
+
+
+class OrderItemIn(BaseModel):
+    work_id: int
+    qty: int
+    price_dzd: int | None = None  # ignored, server recalculates
+
+
+class OrderIn(BaseModel):
+    customer_name: str
+    phone: str
+    wilaya_code: int
+    address: str
+    items: list[OrderItemIn]
+
+
+@api.post("/orders")
+def create_order(request, payload: OrderIn):
+    phone = _normalize_phone(payload.phone)
+    if not phone:
+        raise ValidationError("Invalid Algerian phone (05/06/07 + 8 digits)")
+    try:
+        wilaya = Wilaya.objects.get(code=payload.wilaya_code)
+    except Wilaya.DoesNotExist:
+        raise ValidationError("Unknown wilaya_code")
+    if not payload.items:
+        raise ValidationError("items empty")
+    # Server recalculates prices — never trust client prices.
+    total = 0
+    resolved = []
+    for it in payload.items:
+        if it.qty is None or it.qty < 1 or it.qty > 10:
+            raise ValidationError("qty must be 1..10")
+        try:
+            edition = Edition.objects.select_related("work").get(
+                work_id=it.work_id, is_published=True
+            )
+        except (Edition.DoesNotExist, ValueError):
+            raise ValidationError(f"Book {it.work_id} not published")
+        if edition.price_dzd is None:
+            raise ValidationError(f"Book {it.work_id} has no price")
+        unit = int(edition.price_dzd)
+        resolved.append((edition, int(it.qty), unit))
+        total += unit * int(it.qty)
+    delivery = int(os.environ.get("DEFAULT_DELIVERY_FEE_DZD", "0") or 0)
+    # TODO real fees per wilaya; currently one flat env value.
+    total += delivery
+    order = Order.objects.create(
+        status=STATUS_NEW,
+        customer_name=payload.customer_name.strip(),
+        phone=phone,
+        wilaya=wilaya,
+        address=payload.address.strip(),
+        delivery_fee_dzd=delivery,
+        total_dzd=total,
+    )
+    for edition, qty, unit in resolved:
+        OrderItem.objects.create(order=order, edition=edition, qty=qty, unit_price_dzd=unit)
+    # Do NOT log phone or address.
+    logger.info("order created id=%s total=%s", order.id, total)
+    return {"id": order.id, "total_dzd": int(total)}
