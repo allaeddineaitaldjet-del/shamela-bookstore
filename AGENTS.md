@@ -50,5 +50,16 @@ Two interfaces, one backend:
 - Tests (from project root): `pytest`
 - Lint (from project root): `ruff check .`
 
+## Report file (mandatory after every task)
+At the end of EVERY task, before the final commit, write reports/LAST_REPORT.md (overwrite it each time) and commit it together with the work. Contents:
+1. Task name and the commit hashes you made (git log --oneline -n 10).
+2. Full output of `pytest` (last lines are enough if all pass, full output if anything fails) and of `ruff check .`.
+3. Files created or changed (git diff --stat against the commit before the task).
+4. Commands I can run to see the result (exact commands and URLs).
+5. Sample output (JSON, console output) where relevant.
+6. Things you did NOT do, skipped, were unsure about, or worked around. Be honest; write "none" only if true.
+7. New deferred problems you noticed: also append them to BACKLOG.md if it exists.
+Rules: never put secrets, .env content, real customer phone numbers or addresses in the report. Do not add reports/ to .gitignore, I read this file from GitHub.
+
 ## Current phase
 Phase 0 done. Next: Phase 1. Out of scope for now: online payment, user accounts for customers, reviews, coupons.
