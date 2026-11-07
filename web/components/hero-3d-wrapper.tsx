@@ -4,13 +4,10 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { BookCover } from "@/components/book-card";
 
+// Lazy, client-only. The loading state already fills the same slot box.
 const Hero3D = dynamic(() => import("@/components/hero-3d").then((m) => m.Hero3D), {
   ssr: false,
-  loading: () => (
-    <div style={{ aspectRatio: "2/3", maxHeight: 360, width: "100%" }}>
-      <BookCover title="مكتبة الشاملة" author={null} />
-    </div>
-  ),
+  loading: () => <FlatCover />,
 });
 
 function webglOK() {
@@ -23,6 +20,16 @@ function webglOK() {
   } catch {
     return false;
   }
+}
+
+function FlatCover() {
+  return (
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="aspect-[2/3] h-full">
+        <BookCover title="مكتبة الشاملة" author={null} />
+      </div>
+    </div>
+  );
 }
 
 export function Hero3DWrapper() {
@@ -48,16 +55,10 @@ export function Hero3DWrapper() {
     return () => obs.disconnect();
   }, []);
 
-  if (!enabled) {
-    return (
-      <div id="hero-3d-slot" style={{ aspectRatio: "2/3", maxHeight: 360, width: "100%" }}>
-        <BookCover title="مكتبة الشاملة" author={null} />
-      </div>
-    );
-  }
+  // The fallback and the canvas share the exact same slot box: no layout jump.
   return (
-    <div id="hero-3d-slot" style={{ aspectRatio: "4/3", maxHeight: 360, width: "100%" }}>
-      {visible ? <Hero3D /> : <div style={{ height: "100%" }} />}
+    <div id="hero-3d-slot" className="relative h-full w-full">
+      {enabled && visible ? <Hero3D /> : <FlatCover />}
     </div>
   );
 }

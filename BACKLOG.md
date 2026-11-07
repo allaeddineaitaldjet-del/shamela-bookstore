@@ -19,3 +19,4 @@
 - Book list has N+1 queries on categories.
 - Cart (more than one book per order).
 - Playwright e2e test.
+- Landing (dev only): Next 16 prints `Date.now()` unstable-value errors while prerendering any page that calls the API helper (`revalidate: 0`), e.g. `/[locale]` and `/[locale]/books`. Not caused by the landing redesign (reproduced on the untouched books page); check whether `next build` production output is affected when Cache Components is finalized.

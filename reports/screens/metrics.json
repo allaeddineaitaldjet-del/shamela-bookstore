@@ -1,0 +1,174 @@
+[
+  {
+    "case": "hero-ar-1440",
+    "viewport": "1440x900",
+    "metrics": {
+      "overflow": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "bodyScrollWidth": 1440,
+        "horizontalOverflow": false
+      },
+      "headlineFontSize": "115.2px",
+      "headlineColor": "rgb(237, 230, 214)",
+      "headlineHeight": 276,
+      "slotHeight": 576,
+      "canvasHeight": 576,
+      "canvasPresent": true,
+      "subColor": "rgb(165, 156, 136)",
+      "subFontSize": "18px",
+      "primary": {
+        "color": "rgb(237, 230, 214)",
+        "bg": "rgb(31, 92, 74)",
+        "fontSize": "15px"
+      },
+      "outline": {
+        "color": "rgb(169, 139, 78)",
+        "border": "rgb(169, 139, 78)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "fontSize": "15px"
+      },
+      "landingBg": "rgb(13, 15, 14)",
+      "navWordmark": "مكتبة الشاملة"
+    },
+    "contrast": {
+      "headline (#EDE6D6 on #0D0F0E)": 15.47,
+      "body/subline (#A59C88 on #0D0F0E)": 7.06,
+      "primary button text on button bg": 6.28,
+      "outline button text on page bg": 5.94
+    },
+    "consoleErrors": 1,
+    "errors": [
+      "console: Error: Route \"/[locale]\": Next.js encountered the unstable value `Date.now()` while prerendering.\n\nThis value can change between renders, so it must be either prerendered or computed later.\n\nWays to fix this:\n  - [dynamic] Render at request time by adding a dynamic data access (e.g. `await connection()`) before this call\n  - [cache] Prerender and cache the value with `\"use cache\"`\n  - [client] Render the value on the client with `\"use client\"`\n  - [measure] If the value is for telemetry, use a timing API such as `performance.now()`\n\nLearn more: https://nextjs.org/docs/messages/blocking-prerender-current-time\n    at HomePage (about://React/Server/file:///workspaces/shamela-bookstore/web/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0qt3awywqg-99._.js?31:26:270)\n    at resolveErrorDev (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2029:105)\n    at getOutlinedModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1568:28)\n    at parseModelString (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1688:50)\n    at reviveModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2634:66)\n    at reviveModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2637:61)\n    at reviveModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2716:112)\n    at parseModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2629:16)\n    at initializeModelChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1141:25)\n    at resolveModelChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1039:43)\n    at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2585:371)\n    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2507:9)\n    at processBinaryChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2614:221)\n    at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2801:13)"
+    ]
+  },
+  {
+    "case": "hero-ar-768",
+    "viewport": "768x1024",
+    "metrics": {
+      "overflow": {
+        "scrollWidth": 768,
+        "clientWidth": 768,
+        "bodyScrollWidth": 768,
+        "horizontalOverflow": false
+      },
+      "headlineFontSize": "61.44px",
+      "headlineColor": "rgb(237, 230, 214)",
+      "headlineHeight": 65,
+      "slotHeight": 420,
+      "canvasHeight": 420,
+      "canvasPresent": true,
+      "subColor": "rgb(165, 156, 136)",
+      "subFontSize": "18px",
+      "primary": {
+        "color": "rgb(237, 230, 214)",
+        "bg": "rgb(31, 92, 74)",
+        "fontSize": "15px"
+      },
+      "outline": {
+        "color": "rgb(169, 139, 78)",
+        "border": "rgb(169, 139, 78)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "fontSize": "15px"
+      },
+      "landingBg": "rgb(13, 15, 14)",
+      "navWordmark": "مكتبة الشاملة"
+    },
+    "contrast": {
+      "headline (#EDE6D6 on #0D0F0E)": 15.47,
+      "body/subline (#A59C88 on #0D0F0E)": 7.06,
+      "primary button text on button bg": 6.28,
+      "outline button text on page bg": 5.94
+    },
+    "consoleErrors": 1,
+    "errors": [
+      "console: Error: Route \"/[locale]\": Next.js encountered the unstable value `Date.now()` while prerendering.\n\nThis value can change between renders, so it must be either prerendered or computed later.\n\nWays to fix this:\n  - [dynamic] Render at request time by adding a dynamic data access (e.g. `await connection()`) before this call\n  - [cache] Prerender and cache the value with `\"use cache\"`\n  - [client] Render the value on the client with `\"use client\"`\n  - [measure] If the value is for telemetry, use a timing API such as `performance.now()`\n\nLearn more: https://nextjs.org/docs/messages/blocking-prerender-current-time\n    at HomePage (about://React/Server/file:///workspaces/shamela-bookstore/web/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0qt3awywqg-99._.js?31:26:270)\n    at resolveErrorDev (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2029:105)\n    at getOutlinedModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1568:28)\n    at parseModelString (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1688:50)\n    at reviveModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2634:66)\n    at reviveModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2637:61)\n    at reviveModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2716:112)\n    at parseModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2629:16)\n    at initializeModelChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1141:25)\n    at resolveModelChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1039:43)\n    at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2585:371)\n    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2507:9)\n    at processBinaryChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2614:221)\n    at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2801:13)"
+    ]
+  },
+  {
+    "case": "hero-ar-390",
+    "viewport": "390x844",
+    "metrics": {
+      "overflow": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "horizontalOverflow": false
+      },
+      "headlineFontSize": "51.2px",
+      "headlineColor": "rgb(237, 230, 214)",
+      "headlineHeight": 123,
+      "slotHeight": 320,
+      "canvasHeight": 320,
+      "canvasPresent": true,
+      "subColor": "rgb(165, 156, 136)",
+      "subFontSize": "18px",
+      "primary": {
+        "color": "rgb(237, 230, 214)",
+        "bg": "rgb(31, 92, 74)",
+        "fontSize": "15px"
+      },
+      "outline": {
+        "color": "rgb(169, 139, 78)",
+        "border": "rgb(169, 139, 78)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "fontSize": "15px"
+      },
+      "landingBg": "rgb(13, 15, 14)",
+      "navWordmark": "مكتبة الشاملة"
+    },
+    "contrast": {
+      "headline (#EDE6D6 on #0D0F0E)": 15.47,
+      "body/subline (#A59C88 on #0D0F0E)": 7.06,
+      "primary button text on button bg": 6.28,
+      "outline button text on page bg": 5.94
+    },
+    "consoleErrors": 1,
+    "errors": [
+      "console: Error: Route \"/[locale]\": Next.js encountered the unstable value `Date.now()` while prerendering.\n\nThis value can change between renders, so it must be either prerendered or computed later.\n\nWays to fix this:\n  - [dynamic] Render at request time by adding a dynamic data access (e.g. `await connection()`) before this call\n  - [cache] Prerender and cache the value with `\"use cache\"`\n  - [client] Render the value on the client with `\"use client\"`\n  - [measure] If the value is for telemetry, use a timing API such as `performance.now()`\n\nLearn more: https://nextjs.org/docs/messages/blocking-prerender-current-time\n    at HomePage (about://React/Server/file:///workspaces/shamela-bookstore/web/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0qt3awywqg-99._.js?31:26:270)\n    at resolveErrorDev (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2029:105)\n    at getOutlinedModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1568:28)\n    at parseModelString (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1688:50)\n    at reviveModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2634:66)\n    at reviveModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2637:61)\n    at reviveModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2716:112)\n    at parseModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2629:16)\n    at initializeModelChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1141:25)\n    at resolveModelChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1039:43)\n    at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2585:371)\n    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2507:9)\n    at processBinaryChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2614:221)\n    at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2801:13)"
+    ]
+  },
+  {
+    "case": "hero-fr-1440",
+    "viewport": "1440x900",
+    "metrics": {
+      "overflow": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "bodyScrollWidth": 1440,
+        "horizontalOverflow": false
+      },
+      "headlineFontSize": "115.2px",
+      "headlineColor": "rgb(237, 230, 214)",
+      "headlineHeight": 432,
+      "slotHeight": 576,
+      "canvasHeight": 576,
+      "canvasPresent": true,
+      "subColor": "rgb(165, 156, 136)",
+      "subFontSize": "18px",
+      "primary": {
+        "color": "rgb(237, 230, 214)",
+        "bg": "rgb(31, 92, 74)",
+        "fontSize": "15px"
+      },
+      "outline": {
+        "color": "rgb(169, 139, 78)",
+        "border": "rgb(169, 139, 78)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "fontSize": "15px"
+      },
+      "landingBg": "rgb(13, 15, 14)",
+      "navWordmark": "Librairie Shamela"
+    },
+    "contrast": {
+      "headline (#EDE6D6 on #0D0F0E)": 15.47,
+      "body/subline (#A59C88 on #0D0F0E)": 7.06,
+      "primary button text on button bg": 6.28,
+      "outline button text on page bg": 5.94
+    },
+    "consoleErrors": 1,
+    "errors": [
+      "console: Error: Route \"/[locale]\": Next.js encountered the unstable value `Date.now()` while prerendering.\n\nThis value can change between renders, so it must be either prerendered or computed later.\n\nWays to fix this:\n  - [dynamic] Render at request time by adding a dynamic data access (e.g. `await connection()`) before this call\n  - [cache] Prerender and cache the value with `\"use cache\"`\n  - [client] Render the value on the client with `\"use client\"`\n  - [measure] If the value is for telemetry, use a timing API such as `performance.now()`\n\nLearn more: https://nextjs.org/docs/messages/blocking-prerender-current-time\n    at HomePage (about://React/Server/file:///workspaces/shamela-bookstore/web/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0qt3awywqg-99._.js?31:26:270)\n    at resolveErrorDev (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2029:105)\n    at getOutlinedModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1568:28)\n    at parseModelString (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1688:50)\n    at reviveModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2634:66)\n    at reviveModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2637:61)\n    at reviveModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2716:112)\n    at parseModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2629:16)\n    at initializeModelChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1141:25)\n    at resolveModelChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:1039:43)\n    at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2585:371)\n    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2507:9)\n    at processBinaryChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2614:221)\n    at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js:2801:13)"
+    ]
+  }
+]

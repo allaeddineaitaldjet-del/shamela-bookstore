@@ -9,14 +9,10 @@ import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import type { BookRow, CategoryRow } from "@/lib/api";
 import { BookCard } from "@/components/book-card";
-import { Hero3DWrapper } from "@/components/hero-3d-wrapper";
+import { DarkHero } from "@/components/landing/dark-hero";
 import { useLenisScrollTrigger } from "@/components/motion/use-lenis-gsap";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
-
-function splitWords(text: string) {
-  return text.split(/\s+/).filter(Boolean);
-}
 
 export function LandingSections({
   categories,
@@ -35,16 +31,9 @@ export function LandingSections({
   const scope = useRef<HTMLElement>(null);
   useLenisScrollTrigger();
 
-  const words = splitWords(t("heroTitle"));
-
   useGSAP(
     () => {
       if (reduce) return;
-      gsap.fromTo(
-        ".hero-word",
-        { opacity: 0, y: dir === "rtl" ? 20 : 20 },
-        { opacity: 1, y: 0, duration: 0.7, stagger: 0.08, ease: "power2.out", delay: 0.2 }
-      );
       // Featured horizontal parallax — vertical fallback in RTL safety:
       // we animate x only, flipped for RTL, pinned section.
       const track = gsap.utils.selector(".feat-track");
@@ -84,91 +73,7 @@ export function LandingSections({
   return (
     <main ref={scope} style={{ overflowX: "hidden" }}>
       {/* Hero */}
-      <section
-        style={{
-          minHeight: "100vh",
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          alignItems: "center",
-          gap: "2rem",
-          maxWidth: 1100,
-          marginInlineStart: "auto",
-          marginInlineEnd: "auto",
-          paddingInlineStart: "1rem",
-          paddingInlineEnd: "1rem",
-          paddingBlockStart: "6rem",
-          position: "relative",
-        }}
-      >
-        <div
-          aria-hidden
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage:
-              "radial-gradient(circle at 80% 20%, var(--gold) 0, transparent 30%)",
-            opacity: 0.08,
-            pointerEvents: "none",
-          }}
-        />
-        <div style={{ position: "relative" }}>
-          <h1
-            style={{
-              fontSize: "clamp(2rem, 6vw, 3.5rem)",
-              lineHeight: 1.2,
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "0.5rem",
-            }}
-          >
-            {words.map((w, i) => (
-              <span key={i} className="hero-word" style={{ display: "inline-block" }}>
-                {w}
-              </span>
-            ))}
-          </h1>
-          <p style={{ fontSize: 18, color: "var(--ink-soft)" }}>{t("heroLine")}</p>
-          <p style={{ color: "var(--ink-soft)" }}>{t("bookCount", { count: total })}</p>
-          <div style={{ display: "flex", gap: "1rem", marginBlockStart: "1.5rem", flexWrap: "wrap" }}>
-            <Link
-              href={`/${locale}/books`}
-              style={{
-                background: "var(--primary)",
-                color: "#fff",
-                paddingInlineStart: "1.5rem",
-                paddingInlineEnd: "1.5rem",
-                minHeight: 44,
-                display: "inline-flex",
-                alignItems: "center",
-                borderRadius: 6,
-                textDecoration: "none",
-                fontWeight: 700,
-              }}
-            >
-              {t("browse")}
-            </Link>
-            <a
-              href="#how"
-              style={{
-                border: "1px solid var(--primary)",
-                color: "var(--primary)",
-                paddingInlineStart: "1.5rem",
-                paddingInlineEnd: "1.5rem",
-                minHeight: 44,
-                display: "inline-flex",
-                alignItems: "center",
-                borderRadius: 6,
-                textDecoration: "none",
-              }}
-            >
-              {t("howItWorks")}
-            </a>
-          </div>
-        </div>
-        <div style={{ position: "relative" }}>
-          <Hero3DWrapper />
-        </div>
-      </section>
+      <DarkHero total={total} />
 
       {/* Categories */}
       <section style={{ maxWidth: 1100, marginInlineStart: "auto", marginInlineEnd: "auto", paddingInlineStart: "1rem", paddingInlineEnd: "1rem", paddingBlockStart: "4rem" }}>

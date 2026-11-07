@@ -25,6 +25,31 @@ Dark mode (prefers-color-scheme: dark):
 
 Rules: body text contrast at least 4.5:1. Never use color alone to show state (add text or icon). Gold is for decoration only, never for text.
 
+## Landing dark editorial
+
+The landing page is **always dark** regardless of `prefers-color-scheme`. Scope tokens to the wrapper class `.landing-dark` (set in `globals.css`). Shop pages stay light and will be migrated later.
+
+Tokens (scoped to `.landing-dark` in `globals.css`):
+- background: `#0D0F0E`
+- surface: `#1A1C19`
+- ink: `#EDE6D6` (main text)
+- ink-soft: `#A59C88` (secondary text)
+- primary: `#1F5C4A` (buttons, links)
+- accent: `#B5532F` (terracotta: highlights)
+- gold: `#A98B4E` (decoration, hairlines, small-caps labels — never body text)
+- line: `rgba(169,139,78,0.15)`
+
+Background layers (no images):
+1. Two blurred emerald radial gradients that drift very slowly (60–90 s CSS keyframes, `transform` only, `will-change: transform`).
+2. SVG `feTurbulence` noise overlay at 4–6 % opacity.
+3. Subtle vignette (radial gradient from transparent center to dark edges).
+
+Nav: transparent, 72 px, hairline gold border at 20 % opacity. Wordmark at start, links + language switch at end. After 40 px scroll: solid dark background + blur fades in. Mobile: hamburger button → full-screen overlay menu.
+
+Hero layout (desktop ≥ 1024 px): 12-col grid, max 1280 px. Text on start side (columns 1–5), 3D book on end side (columns 6–12). Tablet: book above text (420 px tall). Mobile: book first (320 px), then text, buttons full-width. DOM order: text first, then book.
+
+Corners: 0–2 px. No rounded cards, no drop-shadow boxes, no gradients except the ambient light.
+
 ## Typography
 - Arabic body: Noto Naskh Arabic (or Amiri). Size 18px minimum, line-height 1.9.
 - Arabic headings and book titles on covers: Reem Kufi or Amiri bold.

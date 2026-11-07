@@ -69,3 +69,94 @@ html[lang="fr"] h2,
 html[lang="fr"] h3 {
   font-family: var(--font-lora), Georgia, serif;
 }
+
+/* Landing dark editorial: override variables under .landing-dark */
+@keyframes float1 {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(3vw, -2vh, 0); }
+}
+
+@keyframes float2 {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(-4vw, 3vh, 0); }
+}
+
+.landing-dark {
+  --bg: #0D0F0E;
+  --surface: #1A1C19;
+  --ink: #EDE6D6;
+  --ink-soft: #A59C88;
+  --primary: #1F5C4A;
+  --accent: #B5532F;
+  --gold: #A98B4E;
+  --line: rgba(169,139,78,0.15);
+
+  --color-background: var(--bg);
+  --color-foreground: var(--ink);
+  --color-surface: var(--surface);
+  --color-ink-soft: var(--ink-soft);
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --color-gold: var(--gold);
+  --color-line: var(--line);
+
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* Ambient emerald lights: transform-only drift, paused for reduced motion */
+.emerald-light {
+  will-change: transform;
+}
+.emerald-light--1 {
+  background: radial-gradient(ellipse at 20% 30%, rgba(31, 92, 74, 0.35) 0%, transparent 60%);
+  animation: float1 80s ease-in-out infinite;
+}
+.emerald-light--2 {
+  background: radial-gradient(ellipse at 80% 70%, rgba(15, 70, 56, 0.25) 0%, transparent 55%);
+  animation: float2 95s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .emerald-light {
+    animation: none;
+  }
+}
+
+/* Hero book slot: the 3D canvas and the flat fallback share this box, so nothing jumps */
+.hero-book-slot {
+  width: 100%;
+  height: clamp(520px, 64vh, 680px);
+}
+
+/* Tablet: book above the text, 420px tall (DOM order stays text-first) */
+@media (max-width: 1023px) {
+  .hero-text {
+    grid-column: span 12 !important;
+    grid-row: 2 !important;
+  }
+  .hero-book {
+    grid-column: span 12 !important;
+    grid-row: 1 !important;
+  }
+  .hero-book-slot {
+    height: 420px;
+  }
+}
+
+/* Mobile: book 320px tall, buttons full width */
+@media (max-width: 767px) {
+  .hero-book-slot {
+    height: 320px;
+  }
+  .nav-desktop {
+    display: none !important;
+  }
+  .nav-menu-btn {
+    display: block !important;
+  }
+  .hero-btns > a {
+    width: 100%;
+    justify-content: center;
+  }
+}
