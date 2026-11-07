@@ -71,6 +71,12 @@ Rules: body text contrast at least 4.5:1. Never use color alone to show state (a
 - Idle: gentle float and slow tilt are allowed. Drag to rotate, with inertia. Open-book / page-flip animation on click is welcome.
 - All of it off when prefers-reduced-motion is set (flat CSS cover instead).
 
+### 3D hero (HOME page only)
+- Small lazy-loaded 3D hero also allowed on the HOME page (one canvas, dynamic import, ssr:false); the full 3D book stays on the book page later. GSAP, ScrollTrigger, three, @react-three/fiber approved. Everything else in DESIGN.md still applies (palette, RTL, reduced motion, no verses/Allah as decoration, no figurative imagery, transform/opacity only).
+- Plain CSS flat cover as the fallback (used when WebGL is unavailable or the user has prefers-reduced-motion).
+- Idle: gentle float and slow tilt are allowed. Drag to rotate, with inertia. Open-book / page-flip animation on click is welcome.
+- All of it off when prefers-reduced-motion is set (flat CSS cover instead).
+
 ## Animation
 Libraries (ask context7 for current docs and install exact versions; do not guess APIs):
 - **Motion** (package `motion`, import from `motion/react`): page transitions, fade/slide-in on scroll, staggered book grids, hover and tap effects, shared-element transition from book card to book page.

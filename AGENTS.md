@@ -13,7 +13,7 @@ Two interfaces, one backend:
 ## Stack (decided, do not change without asking)
 - Backend: Python 3.12, Django 5.2 LTS, PostgreSQL 16 (via Docker/Dev Container), Django Ninja for the storefront API. All commands run inside the Dev Container; the host only runs Docker.
 - Seller/Admin desk: customized Django admin (do not build a separate React admin).
-- Storefront: Next.js + TypeScript (Node LTS, inside Dev Container), next-intl (ar/fr), RTL support. Three.js / React Three Fiber ONLY on the book page, lazy-loaded.
+- Storefront: Next.js + TypeScript (Node LTS, inside Dev Container), next-intl (ar/fr), RTL support. Three.js / React Three Fiber: small lazy-loaded 3D hero on the HOME page (one canvas, dynamic import, ssr:false) AND full 3D book on the book page only, lazy-loaded. GSAP, ScrollTrigger, three, @react-three/fiber approved.
 - Tests: pytest + pytest-django. Lint: ruff.
 
 ## Hard rules
