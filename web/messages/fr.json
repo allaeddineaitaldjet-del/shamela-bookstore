@@ -1,11 +1,20 @@
 {
   "HomePage": {
-    "title": "Hello Librairie Shamela",
+    "title": "Librairie Shamela",
     "subtitle": "Classical and contemporary books",
     "searchPlaceholder": "Search a book...",
     "categories": "Categories",
     "latest": "Latest books",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "heroTitle": "Des livres de confiance",
+    "heroLine": "Classical and contemporary books, payment on delivery.",
+    "browse": "Parcourir les livres",
+    "howItWorks": "Comment ça marche",
+    "bookCount": "{count} livres dans notre librairie",
+    "howTitle": "Comment ça marche",
+    "step1": "Choose a book",
+    "step2": "We call you to confirm",
+    "step3": "Pay on delivery"
   },
   "Common": {
     "search": "Search",
