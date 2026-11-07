@@ -1,6 +1,34 @@
 {
   "HomePage": {
     "title": "Hello Librairie Shamela",
-    "subtitle": "Hello — Librairie Shamela"
+    "subtitle": "Classical and contemporary books",
+    "searchPlaceholder": "Search a book...",
+    "categories": "Categories",
+    "latest": "Latest books",
+    "viewAll": "View all"
+  },
+  "Common": {
+    "search": "Search",
+    "inStock": "In stock",
+    "outOfStock": "Out of stock",
+    "publisher": "Publisher",
+    "editor": "Editor",
+    "pages": "Pages",
+    "volumes": "Volumes",
+    "yearHijri": "Hijri year",
+    "yearGregorian": "Gregorian year",
+    "empty": "No matching books.",
+    "prev": "Prev",
+    "next": "Next"
+  },
+  "Order": {
+    "name": "Full name",
+    "phone": "Phone number",
+    "wilaya": "Wilaya",
+    "address": "Address",
+    "qty": "Qty",
+    "submit": "Commander",
+    "success": "Order received! We will call you to confirm; payment is cash on delivery.",
+    "error": "An error occurred. Please try again."
   }
 }
