@@ -13,6 +13,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from django.core.management.base import BaseCommand, CommandError
+from django.db import transaction
 
 from catalog.models import Category, RawShamelaBook
 
@@ -81,54 +82,57 @@ class Command(BaseCommand):
             if slug not in cat_slugs:
                 raise CommandError(
                     f"Unknown slug {slug!r} from {path.name} — "
-                    f"not in {categories_path}. Import aborted, nothing saved."
+                    f"not in {categories_path}. Import aborted, no books imported."
                 )
             plans.append((path, slug))
 
-        # 3. Upsert per file.
+        # 3. Upsert per file, atomically per file: all rows or none.
         for path, slug in plans:
-            fetched_at = datetime.fromtimestamp(
-                path.stat().st_mtime, tz=timezone.utc
-            )
-            rows = new = updated = unchanged = skipped = 0
-            with path.open(encoding="utf-8-sig", newline="") as f:
-                for row in csv.DictReader(f):
-                    rows += 1
-                    book_url = (row.get("book_title href") or "").strip()
-                    m = BOOK_ID_RE.search(book_url)
-                    if not m:
-                        skipped += 1
-                        continue
-                    source_book_id = m.group(1)
-                    defaults = {
-                        "book_url": book_url,
-                        "title": (row.get("book_title") or "").strip(),
-                        "author_name": (row.get("text-gray") or "").strip(),
-                        "author_url": (row.get("text-gray href") or "").strip(),
-                        "details_text": row.get("margin-top-3") or "",
-                        "category_slug": slug,
-                        "source_file": path.name,
-                        "fetched_at": fetched_at,
-                    }
-                    existing = RawShamelaBook.objects.filter(
-                        source_book_id=source_book_id, category_slug=slug
-                    ).first()
-                    if existing is None:
-                        RawShamelaBook.objects.create(
-                            source_book_id=source_book_id, **defaults
+            with transaction.atomic():
+                fetched_at = datetime.fromtimestamp(
+                    path.stat().st_mtime, tz=timezone.utc
+                )
+                rows = new = updated = unchanged = skipped = 0
+                with path.open(encoding="utf-8-sig", newline="") as f:
+                    for row in csv.DictReader(f):
+                        rows += 1
+                        book_url = (row.get("book_title href") or "").strip()
+                        m = BOOK_ID_RE.search(book_url)
+                        if not m:
+                            skipped += 1
+                            continue
+                        source_book_id = m.group(1)
+                        defaults = {
+                            "book_url": book_url,
+                            "title": (row.get("book_title") or "").strip(),
+                            "author_name": (row.get("text-gray") or "").strip(),
+                            "author_url": (row.get("text-gray href") or "").strip(),
+                            "details_text": row.get("margin-top-3") or "",
+                            "category_slug": slug,
+                            "source_file": path.name,
+                            "fetched_at": fetched_at,
+                        }
+                        existing = RawShamelaBook.objects.filter(
+                            source_book_id=source_book_id, category_slug=slug
+                        ).first()
+                        if existing is None:
+                            RawShamelaBook.objects.create(
+                                source_book_id=source_book_id, **defaults
+                            )
+                            new += 1
+                            continue
+                        changed = any(
+                            getattr(existing, k) != v for k, v in defaults.items()
                         )
-                        new += 1
-                        continue
-                    changed = any(
-                        getattr(existing, k) != v for k, v in defaults.items()
-                    )
-                    if changed:
-                        for k, v in defaults.items():
-                            setattr(existing, k, v)
-                        existing.save(update_fields=list(defaults) + ["imported_at"])
-                        updated += 1
-                    else:
-                        unchanged += 1
+                        if changed:
+                            for k, v in defaults.items():
+                                setattr(existing, k, v)
+                            existing.save(
+                                update_fields=list(defaults) + ["imported_at"]
+                            )
+                            updated += 1
+                        else:
+                            unchanged += 1
             self.stdout.write(
                 f"{path.name}: rows={rows} new={new} updated={updated} "
                 f"unchanged={unchanged} skipped={skipped}"
