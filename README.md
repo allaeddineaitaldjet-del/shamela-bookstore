@@ -1,8 +1,8 @@
 # Al-Shamela Bookstore
 
 Online bookstore for classical and contemporary Islamic books (Algeria).
-Backend: Django + PostgreSQL. Web: Next.js (ar/fr, RTL). Payment: cash on delivery.
-Phase 0 = skeleton only. No features yet.
+Backend: Django + PostgreSQL in `backend/`. Web: Next.js (ar/fr, RTL) in `web/`.
+Payment: cash on delivery. Phase 0 = skeleton only. No features yet.
 
 ## Rule: host runs only Docker
 
@@ -38,11 +38,10 @@ You should see `context7` and `playwright` enabled, `perplexity` disabled.
 
 ## See “hello” on the backend
 
-Inside the container:
+Inside the container (from project root):
 ```
-export PATH=/home/vscode/.local/bin:$PATH
-python manage.py migrate
-python manage.py runserver 0.0.0.0:8000
+cd backend && python manage.py migrate
+cd backend && python manage.py runserver 0.0.0.0:8000
 ```
 Open  http://localhost:8000/  (VS Code forwards `8000` to localhost only) -> you see:
 ```
@@ -54,8 +53,7 @@ Health check: `curl http://localhost:8000/health/` -> `{"status": "ok"}`
 
 Inside the container, in a second terminal:
 ```
-cd web
-npm run dev -- --hostname 0.0.0.0 --port 3000
+cd web && npm run dev -- --hostname 0.0.0.0 --port 3000
 ```
 Open:
 - http://localhost:3000/ar -> Arabic, RTL (`dir="rtl"`), “مرحبا مكتبة الشاملة”
@@ -65,9 +63,15 @@ Ports are **only** forwarded to localhost via `forwardPorts` in `.devcontainer/d
 
 ## Tests and lint (inside container)
 
+From project root:
 ```
 pytest
 ruff check .
+```
+
+Install dependencies (inside container, fresh container already does this via postCreate):
+```
+pip install -r backend/requirements-dev.txt
 ```
 
 ## Playwright inside the container

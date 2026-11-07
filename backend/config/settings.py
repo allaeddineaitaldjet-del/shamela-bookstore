@@ -11,13 +11,22 @@ import dj_database_url
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / ".env")
+load_dotenv(BASE_DIR.parent / ".env")
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-only-not-secret")
 DEBUG_VALUE = os.environ.get("DJANGO_DEBUG", "1")
 DEBUG = DEBUG_VALUE.lower() in ("1", "true", "yes", "on")
 
-ALLOWED_HOSTS = ["*"]
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+if not SECRET_KEY:
+    if DEBUG:
+        SECRET_KEY = "dev-only-not-secret"
+    else:
+        raise RuntimeError(
+            "DJANGO_SECRET_KEY is required when DJANGO_DEBUG is off. "
+            "Set it in ../.env (project root)."
+        )
+
+ALLOWED_HOSTS = ["*"]  # TODO Phase 7: restrict
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -58,19 +67,17 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
-if DATABASE_URL:
-    DATABASES = {
-        "default": dj_database_url.config(
-            default=DATABASE_URL, conn_max_age=60
-        )
-    }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
+if not DATABASE_URL:
+    raise RuntimeError(
+        "DATABASE_URL is required. Set it in ../.env (project root) "
+        "with host postgres, e.g. postgres://...@postgres:5432/..."
+    )
+
+DATABASES = {
+    "default": dj_database_url.config(
+        default=DATABASE_URL, conn_max_age=60
+    )
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -88,7 +95,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = "ar"
-TIME_ZONE = "UTC"
+TIME_ZONE = "Africa/Algiers"
 USE_I18N = True
 USE_TZ = True
 

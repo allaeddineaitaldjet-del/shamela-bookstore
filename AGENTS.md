@@ -45,10 +45,10 @@ Two interfaces, one backend:
 
 ## Commands (run inside the Dev Container, except docker compose)
 - Start everything: Reopen folder in VS Code Dev Containers (uses `.devcontainer/docker-compose.yml`). Or from host: `docker compose -f .devcontainer/docker-compose.yml up -d --build`
-- Run backend: `python manage.py runserver 0.0.0.0:8000`
-- Run web (in `web/`): `npm run dev -- --hostname 0.0.0.0 --port 3000`
-- Tests: `pytest`
-- Lint: `ruff check .`
+- Run backend (from `backend/`): `cd backend && python manage.py migrate` then `cd backend && python manage.py runserver 0.0.0.0:8000`
+- Run web (in `web/`): `cd web && npm run dev -- --hostname 0.0.0.0 --port 3000`
+- Tests (from project root): `pytest`
+- Lint (from project root): `ruff check .`
 
 ## Current phase
-Phase 0 (setup). Out of scope for now: online payment, user accounts for customers, reviews, coupons.
+Phase 0 done. Next: Phase 1. Out of scope for now: online payment, user accounts for customers, reviews, coupons.
