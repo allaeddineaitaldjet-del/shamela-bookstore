@@ -1,5 +1,18 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "providers": {
+    "aigrid": {
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "baseURL": "https://app.ai-grid.io/v1"
+      },
+      "models": {
+        "Qwen3-30B-A3B-Thinking": {
+          "name": "Qwen3 30B Thinking"
+        }
+      }
+    }
+  },
   "mcp": {
     "servers": {
       "context7": {
@@ -26,7 +39,7 @@
     }
   },
   "permissions": [
-    { "action": "edit", "resource": "*", "effect": "allow" },
+    { "action": "edit",  "resource": "*", "effect": "allow" },
     { "action": "shell", "resource": "*", "effect": "ask" },
     { "action": "shell", "resource": "git status *", "effect": "allow" },
     { "action": "shell", "resource": "git diff *", "effect": "allow" },
