@@ -11,9 +11,9 @@ Two interfaces, one backend:
    The seller phones the customer to confirm delivery. There is NO online payment. Payment is cash on delivery (paiement a la livraison).
 
 ## Stack (decided, do not change without asking)
-- Backend: Python 3.12, Django 5, PostgreSQL (via Docker), Django Ninja for the storefront API.
+- Backend: Python 3.12, Django 5.2 LTS, PostgreSQL 16 (via Docker/Dev Container), Django Ninja for the storefront API. All commands run inside the Dev Container; the host only runs Docker.
 - Seller/Admin desk: customized Django admin (do not build a separate React admin).
-- Storefront: Next.js + TypeScript, next-intl (ar/fr), RTL support. Three.js / React Three Fiber ONLY on the book page, lazy-loaded.
+- Storefront: Next.js + TypeScript (Node LTS, inside Dev Container), next-intl (ar/fr), RTL support. Three.js / React Three Fiber ONLY on the book page, lazy-loaded.
 - Tests: pytest + pytest-django. Lint: ruff.
 
 ## Hard rules
@@ -43,9 +43,10 @@ Two interfaces, one backend:
 4. Commit after each working task with a clear message.
 5. If a rule here blocks something the owner asks, say so and ask, do not silently break the rule.
 
-## Commands (fill in once the project exists)
-- Start database: `docker compose up -d`
-- Run backend: `python manage.py runserver`
+## Commands (run inside the Dev Container, except docker compose)
+- Start everything: Reopen folder in VS Code Dev Containers (uses `.devcontainer/docker-compose.yml`). Or from host: `docker compose -f .devcontainer/docker-compose.yml up -d --build`
+- Run backend: `python manage.py runserver 0.0.0.0:8000`
+- Run web (in `web/`): `npm run dev -- --hostname 0.0.0.0 --port 3000`
 - Tests: `pytest`
 - Lint: `ruff check .`
 

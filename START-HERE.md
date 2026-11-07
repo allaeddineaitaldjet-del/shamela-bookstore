@@ -5,10 +5,10 @@ You do not write code. Your job: give clear instructions, check the result, and 
 ## 1. Install these (once)
 - **VS Code**: https://code.visualstudio.com
 - **Git**: https://git-scm.com
-- **Node.js (LTS)**: https://nodejs.org
-- **Python 3.12+**: https://python.org (Windows: tick "Add to PATH")
-- **Docker Desktop**: https://docker.com (runs the database)
-- Windows users: opencode usually works more smoothly inside **WSL** (Ubuntu). If the steps below give you errors, install WSL, open VS Code "in WSL", and repeat there.
+- **Docker**: https://docker.com — on Fedora install moby-engine (Docker). Docker is the only thing of the stack that runs on your host.
+- **Python 3.12 and Node LTS**: you do NOT install them on your computer. They live inside the Dev Container (see `.devcontainer/`). On your host you only run `docker` / `docker compose` commands. Never use `sudo`, `pip`, or `npm` on the host.
+- opencode: install and run it **inside** the Dev Container (see README.md), not on the host.
+- Fedora/SELinux: the container mounts your project folder with a `:z` SELinux label so files stay readable (see `.devcontainer/docker-compose.yml`).
 
 ## 2. Create the project folder
 1. Create a folder `shamela-bookstore` and copy ALL files from this kit into it (including the hidden `.opencode` folder, `.gitignore`).
@@ -21,17 +21,16 @@ You do not write code. Your job: give clear instructions, check the result, and 
    ```
    Git is your undo button: commit after every task that works.
 
-## 3. Install opencode
-In the VS Code terminal:
+## 3. Install opencode (inside the Dev Container, not on the host)
+opencode is already installed in the `app` container image via `.devcontainer/Dockerfile` (binary at `~/.opencode/bin/opencode` for user `vscode`). You do not run the curl installer on your Fedora host.
+
+In the VS Code terminal (which after Reopen in Container runs inside the container):
 ```
-curl -fsSL https://opencode.ai/install | bash
 opencode --version
 ```
-(If that fails on Windows without WSL, check https://opencode.ai for the current install command.)
-
 Then run `opencode` in the VS Code terminal. The VS Code extension installs itself. Afterwards:
 - `Ctrl+Esc` opens opencode in a split terminal; `Ctrl+Shift+Esc` starts a new session.
-- Type `/connect` and pick your AI provider (you need an account or API key with one).
+- Type `/connect` and pick your AI provider (you need an account or API key with one). Your login is saved in a named Docker volume (`opencode-data` -> `/home/vscode/.local/share/opencode`) and survives rebuilds.
 - Press `Tab` to switch between **Plan** (thinks, writes plans, changes nothing) and **Build** (edits files).
 
 ## 4. Check the integrations loaded

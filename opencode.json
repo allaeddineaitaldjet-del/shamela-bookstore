@@ -9,7 +9,11 @@
       },
       "playwright": {
         "type": "local",
-        "command": ["npx", "-y", "@playwright/mcp@latest"]
+        "command": ["npx", "-y", "@playwright/mcp@latest", "--headless", "--browser", "chromium"],
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/ms-playwright",
+          "CI": "1"
+        }
       },
       "perplexity": {
         "type": "local",

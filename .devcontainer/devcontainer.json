@@ -1,0 +1,32 @@
+{
+  "name": "Al-Shamela Bookstore",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/shamela-bookstore",
+  "remoteUser": "vscode",
+  "forwardPorts": [8000, 3000],
+  "portsAttributes": {
+    "8000": {
+      "label": "Django backend (localhost only)"
+    },
+    "3000": {
+      "label": "Next.js web (localhost only)"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint"
+      ]
+    }
+  },
+  "remoteEnv": {
+    "PLAYWRIGHT_BROWSERS_PATH": "/ms-playwright"
+  },
+  "postCreateCommand": "bash -c 'test -f .env && echo .env-ok || echo MISSING-.env; grep -q \"^DJANGO_SECRET_KEY=.\\+\" .env && echo secret-ok || echo EMPTY-DJANGO_SECRET_KEY; grep -q \"^DJANGO_DEBUG=.\\+\" .env && echo debug-ok || echo EMPTY-DJANGO_DEBUG; grep -q \"^POSTGRES_USER=.\\+\" .env && echo pguser-ok || echo EMPTY-POSTGRES_USER; grep -q \"^POSTGRES_DB=.\\+\" .env && echo pgdb-ok || echo EMPTY-POSTGRES_DB; grep -q \"^POSTGRES_PASSWORD=.\\+\" .env && echo pgpass-ok || echo EMPTY-POSTGRES_PASSWORD; grep -q \"^DATABASE_URL=.*@postgres:5432.*\" .env && echo dburl-ok || echo BAD-DATABASE_URL-needs-@postgres:5432; grep -q \"^TELEGRAM_BOT_TOKEN=.\\+\" .env && echo tg-token-ok || echo EMPTY-TELEGRAM_BOT_TOKEN; grep -q \"^TELEGRAM_CHAT_ID=.\\+\" .env && echo tg-chat-ok || echo EMPTY-TELEGRAM_CHAT_ID; pip install -r requirements.txt 2>/dev/null || true; if [ -d web ]; then (cd web && npm install --legacy-peer-deps 2>/dev/null || true); fi; echo postCreate-done'",
+  "postStartCommand": "bash -c 'PLAYWRIGHT_BROWSERS_PATH=/ms-playwright npx -y @playwright/mcp@latest --help >/dev/null 2>&1 || echo playwright-mcp-check-failed'",
+  "shutdownAction": "stopCompose"
+}
