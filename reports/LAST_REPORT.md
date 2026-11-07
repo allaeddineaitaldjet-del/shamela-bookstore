@@ -1,94 +1,113 @@
-# LAST_REPORT — WOW Landing
+# LAST_REPORT — Landing step 1: dark editorial nav + hero
 
 ## 1. Task name and commits
-Wow landing (STAGE 0-4):
+
+Landing redesign step 1 (navigation bar + hero section only):
 ```
-31cf36b Wow STAGE 3+4: landing sections with GSAP and 3D hero
-7ce22a3 Wow STAGE 2: gsap three fiber lenis_scrolltrigger
-7529994 Wow STAGE 1: landing and shop layouts
-770df11 Wow STAGE 0: allow small 3D hero on home page
-2be2104 fix report
-6f34dca Prototype PART 1 storefront
-26f0def Prototype PART 0 wilayas
+3a80193 Landing step 1: dark editorial nav and hero
+(latest commit) Landing step 1: report
 ```
+The latest commit only contains this report.
 
-## 2. pytest + ruff + npm
+Scope respected: shop pages, backend, API code, i18n key meanings and the landing sections below the hero were not redesigned. The landing wrapper now darkens those existing sections and the footer by overriding the design tokens, as requested.
 
-```
-pytest: 46 passed
-ruff check .: All checks passed!
-npm run build: Compiled successfully, 15 routes
-npm run lint: 0 errors, 2 warnings (window.location, unused delta)
-```
+## 2. pytest, ruff, npm
 
-Libraries (context7 checked, exact versions):
-- gsap 3.15.1, @gsap/react 2.1.2, three 0.187.0, @react-three/fiber 9.8.2, @types/three 0.187.0
-- No drei (not needed, no Environment/HDR presets)
-- motion 14.10.1, lenis 1.3.27 already installed
+- `ruff check .`: **All checks passed!** (run with `uvx ruff` because the container toolchain is not present here).
+- `pytest`: **NOT RUN — honest limitation.** This session runs on the host, not inside the Dev Container: pytest/pytest-django are not installed and PostgreSQL is not reachable at the expected host. No backend file was touched, so the backend test suite is unaffected, but I could not produce its output. `docker compose ps` shows no running services.
+- `npm run lint`: **0 errors**, 1 warning already present before this task (`order-form.tsx`, `window.location.href`).
+- `npm run build`: **success**, 15 routes generated (same route list as before).
 
-Bundle impact: Next 16 (Turbopack) does not print First Load JS in build output. Landing bundle increased by GSAP+Three (lazy via dynamic ssr:false for 3D, GSAP only in landing-sections client). Shop pages (/books, /books/[id], /order/success) do not import GSAP/Three (only Reveal). Verified by build routes: landing is ◐ partial, shop is static.
-
-Lenis → GSAP: `use-lenis-gsap.ts` uses `useLenis()` scroll event → `ScrollTrigger.update()`. `respectReducedMotion:true` by default.
-
-## 3. Files changed
+## 3. Files created or changed (`git diff --stat ae3c1f8 HEAD`)
 
 ```
-AGENTS.md, DESIGN.md (STAGE 0 allow home 3D)
-web/app/[locale]/(landing)/layout.tsx, (shop)/layout.tsx
-web/components/landing-header.tsx, site-footer.tsx, landing-sections.tsx
-web/components/hero-3d.tsx, hero-3d-wrapper.tsx
-web/components/motion/use-lenis-gsap.ts
-web/messages/ar.json, fr.json (hero/copy)
-web/package.json, package-lock.json
-web/app/[locale]/layout.tsx (no SiteHeader)
+ BACKLOG.md                            |   1 +
+ DESIGN.md                             |  25 +++++
+ reports/screens/hero-ar-1440.png      | Bin 0 -> 1056203 bytes
+ reports/screens/hero-ar-390.png       | Bin 0 -> 262007 bytes
+ reports/screens/hero-ar-768.png       | Bin 0 -> 657932 bytes
+ reports/screens/hero-fr-1440.png      | Bin 0 -> 1078424 bytes
+ reports/screens/metrics.json          | 174 ++++++++++++++++++++++++++++++++++
+ web/app/[locale]/(landing)/layout.tsx |  18 ++--
+ web/app/globals.css                   |  91 ++++++++++++++++++
+ web/components/hero-3d-wrapper.tsx    |  31 +++---
+ web/components/hero-3d.tsx            | 111 +++++++++++++++++-----
+ web/components/landing-sections.tsx   | 101 +-------------------
+ web/components/landing/dark-bg.tsx    |  29 ++++++
+ web/components/landing/dark-hero.tsx  | 132 ++++++++++++++++++++++++++
+ web/components/landing/dark-nav.tsx   | 134 ++++++++++++++++++++++++++
+ web/lib/utils.ts                      |   3 +
+ web/messages/ar.json                  |   3 +
+ web/messages/fr.json                  |   3 +
+ 18 files changed, 712 insertions(+), 144 deletions(-)
 ```
 
-Route groups: `(landing)/page.tsx` (home), `(shop)/books`, `(shop)/books/[id]`, `(shop)/order/success`. URLs unchanged (/ar, /ar/books, /ar/books/1...).
+Created: `web/components/landing/dark-bg.tsx`, `dark-nav.tsx`, `dark-hero.tsx`, `web/lib/utils.ts`, `reports/screens/*`.
+Modified: landing layout, `globals.css`, `hero-3d.tsx`, `hero-3d-wrapper.tsx`, `landing-sections.tsx`, `ar.json`, `fr.json`, `DESIGN.md`, `BACKLOG.md`.
 
-## 4. Commands to see result
+## 4. Commands to see the result
 
 ```bash
-cd backend && python manage.py migrate && python manage.py import_raw && python manage.py transform_shamela && python manage.py seed_demo && python manage.py runserver 0.0.0.0:8000
+cd backend && python manage.py migrate && python manage.py runserver 0.0.0.0:8000
 cd web && npm run dev -- --hostname 0.0.0.0 --port 3000
 ```
 
-URLs: http://localhost:3000/ar , http://localhost:3000/fr , http://localhost:3000/ar/books , http://localhost:3000/ar/books/2
-API: http://localhost:8000/api/books , http://localhost:8000/api/wilayas
+URLs:
+- http://localhost:3000/ar (RTL)
+- http://localhost:3000/fr (LTR)
 
-Check light/dark: toggle OS dark mode or DevTools `prefers-color-scheme`. Check 360px width: grid is 2 cols mobile, no horizontal scroll (overflowX hidden on landing main).
+Both servers were already running while I checked. Screenshots are in `reports/screens/`.
 
-## 5. Sample output
+## 5. Sample output (objective checks only)
 
-Build routes:
+Screenshots saved: `hero-ar-1440.png`, `hero-ar-768.png`, `hero-ar-390.png`, `hero-fr-1440.png` (viewport screenshots, 2 s after load).
+
+| case | viewport | horizontal overflow | headline font-size | book slot / canvas height | console errors |
+|---|---|---|---|---|---|
+| ar | 1440x900 | no (1440 = 1440) | 115.2px | 576 / 576 px | 1 |
+| ar | 768x1024 | no (768 = 768) | 61.44px | 420 / 420 px | 1 |
+| ar | 390x844 | no (390 = 390) | 51.2px | 320 / 320 px | 1 |
+| fr | 1440x900 | no (1440 = 1440) | 115.2px | 576 / 576 px | 1 |
+
+Contrast ratios (computed from computed styles, WCAG formula):
+- headline `#EDE6D6` on `#0D0F0E`: **15.47:1**
+- body/subline `#A59C88` on `#0D0F0E`: **7.06:1**
+- primary button text `#EDE6D6` on `#1F5C4A`: **6.28:1**
+- outline button text `#A98B4E` on `#0D0F0E`: **5.94:1**
+
+Layout audit (bounding boxes, CSS px):
 ```
-/[locale] → /ar, /fr
-/[locale]/books → /ar/books, /fr/books
-/[locale]/books/[id] → /ar/books/[id]
-/[locale]/order/success
+ar 1440: text x=827..1360, book x=80..859   (32px overlap, text right / book left)
+fr 1440: text x=80..613,   book x=581..1360 (32px overlap, text left / book right)
+ar 768:  book y=184..604 (420px), text y=604..896 (book above text)
+ar 390:  book y=120..440 (320px), text y=440..850; both buttons 358x44 px (full width)
+DOM order in every case: text first, then book. Buttons pass elementFromPoint hit test.
+Entrance finished: word opacity 1, book opacity 1 after 2.2 s.
 ```
 
-Landing hero (Playwright screenshot `/tmp/opencode/wow-ar2.png`):
-- RTL headline words staggered, green 3D book with terracotta frame + gold star, store name only (no verses/Allah), parchment background with subtle star pattern 8% opacity, text readable.
-- Categories tiles (name_ar/name_fr) with Motion hover tilt.
-- Featured: GSAP ScrollTrigger pinned horizontal track (x moves opposite in RTL vs LTR — implemented via `dir==="rtl" ? getAmt() : -getAmt()`). If RTL pin misbehaves, fallback is vertical parallax grid (not needed — horizontal works in test).
-- How it works: SVG line draws via ScrollTrigger `strokeDashoffset`.
-- CTA button.
+Navigation:
+```
+top of page: nav background rgba(0,0,0,0)
+after 300px scroll: nav background rgb(13,15,14)
+mobile 390px: menu button visible -> overlay opens with 3 links, body scroll locked
+reduced motion: canvas=false (flat cover), slot height 520px, emerald animation="none"
+```
 
-Translations: all copy in `messages/ar.json` / `fr.json`. Real count only: `{count}` from API (`12` after seed_demo).
+The single console error on every page is a **pre-existing Next.js 16 dev warning** (`Date.now()` while prerendering, from the API helper with `revalidate: 0`). It reproduces identically on the untouched `/ar/books` page, so it is not caused by this redesign. It was added to BACKLOG.
 
-## 6. What you did NOT do / skipped / worked around
+## 6. What I did NOT do / skipped / was unsure about
 
-- **Did NOT split Arabic into letters** — headline splits by **words only** (`split(/\s+/)`), preserving cursive joining. Letters-split would break shaping, so not done.
-- **Did NOT add Lottie, Environment presets, postprocessing** — drei not installed (not needed; three + fiber sufficient, no HDR downloads).
-- **Did NOT fix BACKLOG items** (stock bug, 69 wilayas, PageTransition fonts, etc.) — per instructions, deferred.
-- **Featured horizontal:** Used pinned horizontal ScrollTrigger with RTL flip. Works in desktop test; on narrow mobile it may feel tight — if you see jank, report wants vertical parallax fallback (not implemented now).
-- **Categories below fold:** Motion `whileInView` keeps them opacity 0 until scrolled — full-page screenshot shows them faint until scroll (by design).
-- **Shop pages:** No heavy animation (Reveal only, no GSAP/Three in bundle). Verified shop bundle clean.
-- **3D fallback:** `prefers-reduced-motion` or no WebGL → flat `BookCover` (parchment, no canvas). Space reserved via `aspectRatio` to avoid layout shift. `dpr [1,1.5]`, no postprocessing, IntersectionObserver pauses when offscreen.
+- **Did not judge the visuals** (per your instruction). Only DOM measurements are reported.
+- **Did not run pytest** (see section 2): no Dev Container/Postgres/pytest in this session.
+- **Did not use the Playwright MCP browser**: it expects `/ms-playwright`, which does not exist here and cannot be created without root. I installed Chromium into the user cache (`/tmp/opencode/pw`) and ran Playwright scripts directly. Screenshots are still real browser renders.
+- **Did not fix the `Date.now()` dev warning** (pre-existing, also on untouched pages; logged in BACKLOG).
+- **Did not migrate shop pages** to the dark theme; they stay light on purpose.
+- **No new image assets**: background is CSS gradients + SVG feTurbulence only.
+- **Hero 3D**: pointer parallax listens on `window` (not canvas events), so the text/buttons stay clickable; the canvas and the flat fallback share one slot box (no layout jump).
 
 ## 7. New deferred problems
 
-Appended to BACKLOG.md if needed:
-- None new beyond existing BACKLOG (stock bug, 69 wilayas, GET /api/books/{id} two editions, N+1, cart, e2e, PageTransition, fonts, AgENTS owner text, authorization, opencode mismatch, seed_demo deletion, real fees, Phase 7 hardening).
+Added to BACKLOG.md:
+- Next 16 dev-mode `Date.now()` prerender error on API-backed pages (pre-existing; verify in production output when Cache Components is finalized).
 
-Secrets: none in report.
+No secrets, `.env` content, customer phone numbers or addresses appear in this report.
